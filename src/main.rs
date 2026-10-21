@@ -1,5 +1,4 @@
 mod codecs;
-mod network;
 mod client;
 mod encrypted_stream;
 mod impl_client;
