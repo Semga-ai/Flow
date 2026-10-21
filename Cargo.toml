@@ -1,0 +1,25 @@
+[package]
+name = "proxy"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bytes = "1.12.0"
+tokio = { version = "1", default-features = false, features = ["rt", "rt-multi-thread", "net", "time", "macros", "io-util"] }
+tokio-util = { version = "0.7", features = ["codec", "net"] }
+futures = { version = "0.3.34", default-features = false, features = ["std", "alloc"] }
+futures-core = "0.3"
+aes = "0.9.3"
+cfb8 = "0.9.1"
+pin-project-lite = "0.2"
+
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[build]
+rustflags = ["-C", "target-cpu=native"]
