@@ -24,3 +24,7 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 - CONNECTION_ADDRESS;
   The address of the backend Minecraft server where traffic should be routed
   Example: 127.0.0.1:25565
+
+## Similar Projects
+- https://github.com/itzg/mc-router
+- https://github.com/haveachin/infrared
