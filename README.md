@@ -10,7 +10,7 @@
 
 An ultra-lightweight, high-performance Minecraft reverse proxy built from the ground up in Rust. It functions as an intelligent edge-gate that intercepts incoming player connections, processes initial protocol states, and establishes a secure tunnel to your backend server with near-zero overhead.
 
-The project runs on a pure asynchronous state machine, consuming less than 1 MB of RAM (~850 KB) in idle. The compiled executable size is only ~230 KB, making it significantly lighter than traditional Java alternatives.
+The project runs on a pure asynchronous state machine, consuming less than 1 MB of RAM (~850 KB) in idle. The compiled executable size is only ~230 KB, making it significantly lighter than traditional Java or Goland alternatives.
 
 ## Features
 - Reverse Proxy Core - Asynchronous TCP stream proxying between clients and the backend server.
