@@ -6,10 +6,15 @@ use tokio::io::{AsyncWrite, AsyncWriteExt};
 
 use crate::{codecs::PacketFrame, impl_client::ImplClient};
 
-    pub struct Client<T: Stream<Item = Result<PacketFrame, std::io::Error>>, D: AsyncWrite> 
-    {
-        inner: ImplClient<T, D>
-    }
+
+
+pub struct Client<T: Stream<Item = Result<PacketFrame, std::io::Error>>, D: AsyncWrite> 
+{
+    inner: ImplClient<T, D>
+}
+
+
+
 impl <T, D> Client<T, D> 
 where
     T: Stream<Item = Result<PacketFrame,std::io::Error>> + Unpin,
@@ -28,28 +33,36 @@ where
     }
 
     pub async fn foo(self: &mut Self) {
-        while let Some(Ok(mut frame)) = self.inner.get_mut_ref_reader().next().await {
-            match self.inner.get_state() {
-                0 => {
-                    //terminate
-                    todo!()
-                },
-                1 => {
-                    //handshake
-                },
-                2 => {
-                    //status
-                },
-                3 => {
-                    //login 
-                },
-                _ => {
-                    //other
+        while let Some(raw) = self.inner.next().await {
+            match raw {
+                Ok(mut frame) => {
+                    match self.inner.get_state() {
+                        0 => {
+                            //terminate
+                            todo!("Terminate state")
+                        },
+                        1 => {
+                            //handshake
+                        },
+                        2 => {
+                            //status
+                        },
+                        3 => {
+                            //login 
+                        },
+                        _ => {
+                            //other
+                        }
+                    }
+
+                    self.inner.write_all_buf(&mut frame.bytes).await.unwrap();
+                    self.inner.flush().await.unwrap();
+                }
+                Err(e) => {
+                    println!("{}", e);
+                    self.inner.set_state(0);
                 }
             }
-
-            self.inner.get_mut_ref_writer().write_all_buf(&mut frame.bytes).await.unwrap();
         }
-        self.inner.set_state(0);
     }
 }
