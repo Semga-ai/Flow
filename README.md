@@ -14,7 +14,8 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 
 ## Features
 - Reverse Proxy Core - Asynchronous TCP stream proxying between clients and the backend server.
-- Ultra-low Footprint - Extremely light on system resources (~230 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
+- Ultra-low Footprint - Extremely light on system resources (~250 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
+- Multi-routing - Gain the ability to route traffic based on the domain and port through which the user has connected.
 
 ## Configuration (env)
 - LISTENER; 
