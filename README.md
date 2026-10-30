@@ -17,12 +17,13 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 - Ultra-low Footprint - Extremely light on system resources (~230 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
 
 ## Configuration (env)
-- LISTENER_ADDRESS; 
+- LISTENER; 
 	The host and port the proxy will listen on for incoming player connections
-  Example: 0.0.0.0:25565
-- CONNECTION_ADDRESS;
-  The address of the backend Minecraft server where traffic should be routed
-  Example: 127.0.0.1:25565
+	Example: set LISTENER=0.0.0.0:25565
+- ROAMING;
+	Routing string. Format: "listen:port;forward:port;listen2:port;forward2:port".
+	The semicolon (;) character acts as a separator between the listening and forwarding addresses.
+	Example: set ROAMING=best.server.com:25565;cool.server.com:25566
 
 ## Similar Projects
 - https://github.com/itzg/mc-router
