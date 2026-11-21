@@ -14,15 +14,21 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 
 ## Features
 - Reverse Proxy Core - Asynchronous TCP stream proxying between clients and the backend server.
-- Ultra-low Footprint - Extremely light on system resources (~230 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
+- Ultra-low Footprint - Extremely light on system resources (~250 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
+- Multi-routing - Gain the ability to route traffic based on the domain and port through which the user has connected.
+- Proxy protocol support - Supports the v2 proxy protocol
 
 ## Configuration (env)
-- LISTENER_ADDRESS; 
+- LISTENER; 
 	The host and port the proxy will listen on for incoming player connections
-  Example: 0.0.0.0:25565
-- CONNECTION_ADDRESS;
-  The address of the backend Minecraft server where traffic should be routed
-  Example: 127.0.0.1:25565
+	Example: set LISTENER=0.0.0.0:25565
+- ROAMING;
+	Routing string. Format: "listen:port;forward:port;listen2:port;forward2:port".
+	The semicolon (;) character acts as a separator between the listening and forwarding addresses.
+	Example: set ROAMING=best.server.com:25565;cool.server.com:25566
+- HAPROXY;
+  Environment variable that controls support for the Proxy Protocol v2. Accepts the values ​​true/false (false is the default)
+  Example: set HAPROXY=true
 
 ## Similar Projects
 - https://github.com/itzg/mc-router

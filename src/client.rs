@@ -1,4 +1,4 @@
-use std::{sync::{Arc, atomic::AtomicU8}};
+use std::{net::SocketAddr, sync::{Arc, atomic::AtomicU8}};
 
 use futures::StreamExt;
 use futures_core::Stream;
@@ -54,7 +54,7 @@ where
                             //other
                         }
                     }
-
+                    
                     self.inner.write_all_buf(&mut frame.bytes).await.unwrap();
                     self.inner.flush().await.unwrap();
                 }

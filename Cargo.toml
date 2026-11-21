@@ -10,6 +10,7 @@ tokio-util = { version = "0.7", features = ["codec", "net"] }
 futures = { version = "0.3.34", default-features = false, features = ["std", "alloc"] }
 futures-core = "0.3"
 pin-project-lite = "0.2"
+proxy-protocol-rs = "0.8"
 
 
 [profile.release]
