@@ -12,11 +12,13 @@ An ultra-lightweight, high-performance Minecraft reverse proxy built from the gr
 
 The project runs on a pure asynchronous state machine, consuming less than 1 MB of RAM (~850 KB) in idle. The compiled executable size is only ~230 KB, making it significantly lighter than traditional Java or Goland alternatives.
 
+
 ## Features
 - Reverse Proxy Core - Asynchronous TCP stream proxying between clients and the backend server.
 - Ultra-low Footprint - Extremely light on system resources (~250 KB binary size, <1 MB RAM), ideal for high-density edge deployments.
 - Multi-routing - Gain the ability to route traffic based on the domain and port through which the user has connected.
 - Proxy protocol support - Supports the v2 proxy protocol
+
 
 ## Configuration (env)
 - LISTENER; 
@@ -29,6 +31,7 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 - HAPROXY;
   Environment variable that controls support for the Proxy Protocol v2. Accepts the values ​​true/false (false is the default)
   Example: set HAPROXY=true
+
 
 ## Similar Projects
 - https://github.com/itzg/mc-router
