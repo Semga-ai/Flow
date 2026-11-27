@@ -30,48 +30,37 @@ async fn main() {
 
         let domain = RoamingMapper::try_mut_async_from(&mut reader_client_codec).await;
 
-        match domain {
-            Ok(mut vl) => {
-                match mapper.get(&vl.domain) {
-                    Some(out) => {
-                        
-                        let mut stream = TcpStream::connect(out).await.expect("Tcp connect to {out} failed");
-                        stream.set_nodelay(true).unwrap();
+        if let Ok(mut vl) = domain && let Some(out) = mapper.get(&vl.domain) {
 
-                        if (proxy_env.eq("true")) {
-                            stream.write_all(&HeaderBuilder::v2_proxy(source, SocketAddr::from_str(out).unwrap()).build()).await.unwrap();
-                            stream.flush().await.unwrap();
-                        }
+            let mut stream = TcpStream::connect(out).await.expect("Tcp connect to {out} failed");
+            stream.set_nodelay(true).unwrap();
 
-                        stream.write_all(&vl.bytes).await.unwrap();
-                        stream.flush().await.unwrap();
-
-                        let (server_reader, mut server_writer) = stream.into_split();
-
-                        let state: Arc<AtomicU8> = Arc::new(AtomicU8::new(1));
-                        
-                        let mut s2c_client = Client::new(FramedRead::new(server_reader, FragmentCodec {}), client_writer, Arc::clone(&state));
-                        
-                        let mut c2s_client = Client::new(reader_client_codec, server_writer, Arc::clone(&state));
-                        tokio::spawn(async move {
-                            c2s_client.foo().await
-                        });
-
-                        tokio::spawn(async move {
-                            s2c_client.foo().await
-                        });
-
-                    }
-                    None => {
-                        drop(reader_client_codec);
-                        //todo
-                    }
-                }
+            if (proxy_env.eq("true")) {
+                stream.write_all(&HeaderBuilder::v2_proxy(source, SocketAddr::from_str(out).unwrap()).build()).await.unwrap();
+                stream.flush().await.unwrap();
             }
-            Err(e) => {
-                drop(reader_client_codec);
-                //todo
-            }
+
+            stream.write_all(&vl.bytes).await.unwrap();
+            stream.flush().await.unwrap();
+
+            let (server_reader, mut server_writer) = stream.into_split();
+
+            let state: Arc<AtomicU8> = Arc::new(AtomicU8::new(1));
+            
+            let mut s2c_client = Client::new(FramedRead::new(server_reader, FragmentCodec {}), client_writer, Arc::clone(&state));
+            
+            let mut c2s_client = Client::new(reader_client_codec, server_writer, Arc::clone(&state));
+            tokio::spawn(async move {
+                c2s_client.foo().await
+            });
+
+            tokio::spawn(async move {
+                s2c_client.foo().await
+            });
+
+        } else {
+            drop(reader_client_codec);
+            //todo
         }
 
     }

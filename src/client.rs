@@ -2,7 +2,7 @@ use std::{net::SocketAddr, sync::{Arc, atomic::AtomicU8}};
 
 use futures::StreamExt;
 use futures_core::Stream;
-use tokio::io::{AsyncWrite, AsyncWriteExt};
+use tokio::{io::{AsyncWrite, AsyncWriteExt}, time::timeout};
 
 use crate::{codecs::PacketFrame, impl_client::ImplClient};
 

@@ -20,7 +20,6 @@ The project runs on a pure asynchronous state machine, consuming less than 1 MB 
 
 ## Configuration (env)
 - LISTENER; 
-- LISTENER; 
 	The host and port the proxy will listen on for incoming player connections
 	Example: set LISTENER=0.0.0.0:25565
 - ROAMING;
