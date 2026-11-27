@@ -44,12 +44,10 @@ async fn main() {
             stream.flush().await.unwrap();
 
             let (server_reader, mut server_writer) = stream.into_split();
-
-            let state: Arc<AtomicU8> = Arc::new(AtomicU8::new(1));
             
-            let mut s2c_client = Client::new(FramedRead::new(server_reader, FragmentCodec {}), client_writer, Arc::clone(&state));
+            let mut s2c_client = Client::new(FramedRead::new(server_reader, FragmentCodec {}), client_writer);
             
-            let mut c2s_client = Client::new(reader_client_codec, server_writer, Arc::clone(&state));
+            let mut c2s_client = Client::new(reader_client_codec, server_writer);
             tokio::spawn(async move {
                 c2s_client.foo().await
             });
@@ -60,7 +58,6 @@ async fn main() {
 
         } else {
             drop(reader_client_codec);
-            //todo
         }
 
     }

@@ -21,9 +21,9 @@ where
     D: AsyncWrite + Unpin
 {
     /// Creates a new [`Client<T, D>`].
-    pub fn new(reader: T, writer: D, state: Arc<AtomicU8>) -> Client<T, D> {
+    pub fn new(reader: T, writer: D) -> Client<T, D> {
         Client {
-            inner: ImplClient::new(reader, writer, state)
+            inner: ImplClient::new(reader, writer)
         }
     }
 
@@ -36,31 +36,12 @@ where
         while let Some(raw) = self.inner.next().await {
             match raw {
                 Ok(mut frame) => {
-                    match self.inner.get_state() {
-                        0 => {
-                            //terminate
-                            todo!("Terminate state")
-                        },
-                        1 => {
-                            //handshake
-                        },
-                        2 => {
-                            //status
-                        },
-                        3 => {
-                            //login 
-                        },
-                        _ => {
-                            //other
-                        }
-                    }
-                    
                     self.inner.write_all_buf(&mut frame.bytes).await.unwrap();
                     self.inner.flush().await.unwrap();
                 }
                 Err(e) => {
                     println!("{}", e);
-                    self.inner.set_state(0);
+                    break;
                 }
             }
         }

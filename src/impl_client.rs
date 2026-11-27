@@ -15,8 +15,7 @@ pin_project! {
         #[pin]
         reader: T,
         #[pin]
-        writer: D,
-        state: Arc<AtomicU8>
+        writer: D
     }
 }
 
@@ -26,11 +25,10 @@ where
     D: AsyncWrite
 {
 
-    pub fn new(reader: T, writer: D, state: Arc<AtomicU8>) -> ImplClient<T, D> {
+    pub fn new(reader: T, writer: D) -> ImplClient<T, D> {
         ImplClient { 
             reader: reader,
-            writer: writer,
-            state: state
+            writer: writer
         }
     }
 
@@ -54,14 +52,6 @@ where
         self.project().reader
     }
 
-    pub fn set_state(self: &mut Self, state: u8) {
-        self.state.store(state, std::sync::atomic::Ordering::Relaxed);
-    }
-
-    pub fn get_state(self: &mut Self) -> u8 {
-        self.state.load(std::sync::atomic::Ordering::Relaxed)
-    }
-
 }
 
 impl<T, D> Stream for ImplClient<T, D>
@@ -72,9 +62,6 @@ where
     type Item = T::Item;
 
     fn poll_next(self: Pin<&mut Self>, cx: &mut std::task::Context<'_>) -> Poll<Option<Self::Item>> {
-        if self.state.load(std::sync::atomic::Ordering::Relaxed) == 0 {
-            return Poll::Ready(None);
-        }
         self.project().reader.poll_next(cx)
     }
 }
